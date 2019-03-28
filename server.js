@@ -14,7 +14,8 @@ var app = express();
 var port = process.env.PORT || 3000;
 
 /** this project needs a db !! **/ 
-mongoose.connect(process.env.MONGOLAB_URI);
+// mongoose.connect(process.env.MONGOLAB_URI);
+mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true});
 
 app.use(cors());
 
@@ -38,6 +39,9 @@ app.post("/api/shorturl/*", function (req, res) {
     console.error(error);
     console.log(address);
     console.log(family);
+    if (!address) {
+      res.json({"error":"invalid URL"});
+    }
   });
   res.json({
     original_url: req.body.url, "short_url": 1
