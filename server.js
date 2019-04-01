@@ -63,25 +63,23 @@ app.get('/', function(req, res){
 
 app.use(bodyParser.json());
 
+const websites = [];
+
 app.post("/api/shorturl/*", function(req, res) {
   dns.lookup(req.body.url.split("/").pop(), (error, address, family) => {
-    console.error(error);
-    console.log(address);
-    console.log(family);
     if (!address) {
-      res.json({ "error":"invalid URL" });
+      res.json({ "error": "invalid URL" });
     }
   });
+
+  websites.push(req.body.url);
   res.json({
-    original_url: req.body.url, "short_url": 1
+    original_url: req.body.url, "short_url": websites.length - 1,
   });
 });
 
-app.get("api/shourturl/:num?", function(req, res) {
+app.get("/api/shorturl/:num?", function(req, res) {
   const num = req.params.num;
-  const websites = {
-    1: 'https://www.freecodecamp.org/forum/',
-  }
   res.redirect(websites[num]);
 });
 
