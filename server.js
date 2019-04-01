@@ -77,14 +77,13 @@ app.post("/api/shorturl/*", function(req, res) {
   });
 });
 
-app.get("/api/shorturl/1", function(req, res) {
-// app.get("api/shourturl/:num?", function(req, res) {
-  // const num = req.params.num;
-  // const websites = {
-  //   1: 'https://www.freecodecamp.org/forum/',
-  // }
-  res.redirect('https://www.freecodecamp.org/forum/');
-})
+app.get("api/shourturl/:num?", function(req, res) {
+  const num = req.params.num;
+  const websites = {
+    1: 'https://www.freecodecamp.org/forum/',
+  }
+  res.redirect(websites[num]);
+});
 
 app.listen(port, function () {
   console.log('Node.js listening ...');
