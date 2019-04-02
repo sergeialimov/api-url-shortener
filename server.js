@@ -14,37 +14,19 @@ var app = express();
 var port = process.env.PORT || 3000;
 
 /** this project needs a db !! **/ 
-// mongoose.connect(process.env.MONGOLAB_URI);
-// mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
-// 
-// // define schema
-// const Schema = mongoose.Schema;
-// 
-// // create instance of schema
-// const websiteSchema = new Schema({
-//   address : { type: String, required: true },
-//   id : Number,
-// })
-// 
-// // create model from schema
-// const Website = mongoose.model('Website', websiteSchema);
-// 
-// // create document - an instance of model
-// const webInstance = new Person({
-//   name:'Arkadiy',
-//   age: 32,
-//   favoriteFoods: ['pelmeny', 'ryba'],
-// });
-// 
-// // save document
-// const createAndSaveWebsite = function(done) {
-//   webInstance.save(function(err, webInstance) {
-//      if (err) {
-//        console.log(err);
-//      }
-//      done(null, webInstance);
-//   });
-// };
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
+
+// define schema
+const Schema = mongoose.Schema;
+
+// create instance of schema
+const websiteSchema = new Schema({
+  address: { type: String, required: true },
+  id: Number,
+})
+
+// create model from schema
+const Website = mongoose.model('Website', websiteSchema);
 
 app.use(cors());
 
@@ -71,6 +53,22 @@ app.post("/api/shorturl/*", function(req, res) {
       res.json({ "error": "invalid URL" });
     }
   });
+
+  // create document of model
+  const webInstance = new Website({
+    id: 1,
+    address: 'https://google.com',
+  });
+
+  // save document
+  const createAndSaveWebsite = function(done) {
+    webInstance.save(function(err, webInstance) {
+       if (err) {
+         console.log(err);
+       }
+       done(null, webInstance);
+    });
+  };
 
   websites.push(req.body.url);
   res.json({
