@@ -10,10 +10,8 @@ var cors = require('cors');
 
 var app = express();
 
-// Basic Configuration 
 var port = process.env.PORT || 3000;
 
-/** this project needs a db !! **/ 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
 
 // define schema
@@ -23,7 +21,7 @@ const Schema = mongoose.Schema;
 const websiteSchema = new Schema({
   address: { type: String, required: true },
   id: Number,
-})
+});
 
 // create model from schema
 const Website = mongoose.model('Website', websiteSchema);
@@ -31,11 +29,8 @@ const Website = mongoose.model('Website', websiteSchema);
 app.use(cors());
 
 app.use(bodyParser.urlencoded({
-    extended: true
+  extended: true,
 }));
-
-/** this project needs to parse POST bodies **/
-// you should mount the body-parser here
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
