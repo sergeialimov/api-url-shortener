@@ -1,7 +1,6 @@
 'use strict';
 
 const express = require('express');
-const assert = require('assert');
 const MongoClient = require('mongodb').MongoClient;
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -9,7 +8,7 @@ const dns = require('dns');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
-  const uri = "mongodb+srv://8912652:good0101_@cluster0-bie1i.mongodb.net/test?retryWrites=true";
+const uri = "mongodb+srv://8912652:good0101_@cluster0-bie1i.mongodb.net/test?retryWrites=true";
 
 mongoose.connect(uri, {useNewUrlParser: true});
 const db = mongoose.connection;
