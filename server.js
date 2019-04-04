@@ -1,18 +1,22 @@
 'use strict';
 
-var express = require('express');
-var mongo = require('mongodb');
-var mongoose = require('mongoose');
-var bodyParser = require('body-parser');
+const express = require('express');
+const assert = require('assert');
+const MongoClient = require('mongodb').MongoClient;
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 const dns = require('dns');
+const cors = require('cors');
+const app = express();
+const port = process.env.PORT || 3000;
+  const uri = "mongodb+srv://8912652:good0101_@cluster0-bie1i.mongodb.net/test?retryWrites=true";
 
-var cors = require('cors');
-
-var app = express();
-
-var port = process.env.PORT || 3000;
-
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
+mongoose.connect(uri, {useNewUrlParser: true});
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log('we are connected!');
+});
 
 // define schema
 const Schema = mongoose.Schema;
@@ -71,7 +75,8 @@ app.post("/api/shorturl/*", function(req, res) {
   });
 });
 
-app.get("/api/shorturl/:num?", function(req, res) {
+app.get("/api/shorturl/:num", function(req, res) {
+// app.get("/api/shorturl/:num?", function(req, res) {
   const num = req.params.num;
   res.redirect(websites[num]);
 });
