@@ -1,7 +1,6 @@
 'use strict';
 
 const express = require('express');
-// const MongoClient = require('mongodb').MongoClient;
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const dns = require('dns');
@@ -10,7 +9,8 @@ const app = express();
 const port = process.env.PORT || 3000;
 const uri = "mongodb+srv://8912652:good0101_@cluster0-bie1i.mongodb.net/urls?retryWrites=true";
 
-mongoose.connect("mongodb+srv://8912652:good0101_@cluster0-bie1i.mongodb.net/urls?retryWrites=true", {
+// mongoose.disconnect();
+mongoose.connect(uri, {
   keepAlive: true,
   reconnectTries: Number.MAX_VALUE,
   useNewUrlParser: true,
@@ -21,12 +21,6 @@ mongoose.connect("mongodb+srv://8912652:good0101_@cluster0-bie1i.mongodb.net/url
     console.error('Database connection error')
   }
 );
-
-// const db = mongoose.connection;
-// db.on('error', console.error.bind(console, 'connection error:'));
-// db.once('open', function() {
-//   console.log('we are connected!');
-// });
 
 // define schema
 const Schema = mongoose.Schema;
@@ -79,19 +73,30 @@ app.post("/api/shorturl/*", function(req, res) {
        done(null, webInstance);
     });
   };
+  createAndSaveWebsite();
 
-  // websites.push(req.body.url);
+  const db = mongoose.connection;
+  db.on('error', console.error.bind(console, 'connection error:'));
+  db.once('open', function() {
+    console.log('we are connected!');
+  });
+
   res.json({
     original_url: req.body.url, "short_url": websites.length - 1,
   });
 });
 
-app.get("/api/shorturl/:num", function(req, res) {
-// app.get("/api/shorturl/:num?", function(req, res) {
+app.get("/api/shorturl/:num?", function(req, res) {
   const num = req.params.num;
-  res.redirect(websites[num]);
+  console.log('== /api/shorturl/:num? ==', num);
+  // res.redirect(websites[num]);
+  res.json({
+    text: "success",
+  });
 });
 
 app.listen(port, function () {
   console.log('Node.js listening ...');
 });
+
+mongoose.disconnect();
