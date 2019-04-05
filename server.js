@@ -1,21 +1,32 @@
 'use strict';
 
 const express = require('express');
-const MongoClient = require('mongodb').MongoClient;
+// const MongoClient = require('mongodb').MongoClient;
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const dns = require('dns');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
-const uri = "mongodb+srv://8912652:good0101_@cluster0-bie1i.mongodb.net/test?retryWrites=true";
+const uri = "mongodb+srv://8912652:good0101_@cluster0-bie1i.mongodb.net/urls?retryWrites=true";
 
-mongoose.connect(uri, {useNewUrlParser: true});
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  console.log('we are connected!');
-});
+mongoose.connect("mongodb+srv://8912652:good0101_@cluster0-bie1i.mongodb.net/urls?retryWrites=true", {
+  keepAlive: true,
+  reconnectTries: Number.MAX_VALUE,
+  useNewUrlParser: true,
+}).then(() => {
+    console.log('Database connection successful')
+  })
+  .catch(err => {
+    console.error('Database connection error')
+  }
+);
+
+// const db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', function() {
+//   console.log('we are connected!');
+// });
 
 // define schema
 const Schema = mongoose.Schema;
@@ -61,6 +72,7 @@ app.post("/api/shorturl/*", function(req, res) {
   // save document
   const createAndSaveWebsite = function(done) {
     webInstance.save(function(err, webInstance) {
+      console.log('---- webInstance.save');
        if (err) {
          console.log(err);
        }
@@ -68,7 +80,7 @@ app.post("/api/shorturl/*", function(req, res) {
     });
   };
 
-  websites.push(req.body.url);
+  // websites.push(req.body.url);
   res.json({
     original_url: req.body.url, "short_url": websites.length - 1,
   });
