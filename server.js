@@ -27,12 +27,13 @@ const Schema = mongoose.Schema;
 
 // create instance of schema
 const websiteSchema = new Schema({
-  address: { type: String, required: true },
+  address: String,
+  test: Number,
   id: Number,
 });
 
 // create model from schema
-const Website = mongoose.model('Website', websiteSchema);
+const Websites = mongoose.model('Website', websiteSchema);
 
 app.use(cors());
 
@@ -48,51 +49,46 @@ app.get('/', function(req, res){
 
 app.use(bodyParser.json());
 
-const websites = [];
-
-app.post("/api/shorturl/*", function(req, res) {
+app.post("/api/shorturl/new", async (req, res) => {
   dns.lookup(req.body.url.split("/").pop(), (error, address, family) => {
     if (!address) {
       res.json({ "error": "invalid URL" });
     }
   });
 
-  // create document of model
-  const webInstance = new Website({
-    id: 1,
-    address: 'https://google.com',
-  });
-
-  // save document
-  const createAndSaveWebsite = function(done) {
-    webInstance.save(function(err, webInstance) {
-      console.log('---- webInstance.save');
-       if (err) {
-         console.log(err);
-       }
-       done(null, webInstance);
+  try {
+    var website = new Websites({
+      id: 1,
+      test: 1,
+      address: 'https://google.com',
     });
+    console.log('=== 02 ---');
+    var result = website.save();
+    console.log('=== 03 ---');
+    // res.send(result);
+
+    res.json({
+      original_url: req.body.url,
+    });
+
+    console.log('=== 04 ---');
+  } catch (error) {
+    res.status(500).send(error);
   };
-  createAndSaveWebsite();
 
-  const db = mongoose.connection;
-  db.on('error', console.error.bind(console, 'connection error:'));
-  db.once('open', function() {
-    console.log('we are connected!');
-  });
-
-  res.json({
-    original_url: req.body.url, "short_url": websites.length - 1,
-  });
+  // res.json({
+  //   original_url: req.body.url,
+  // });
 });
 
 app.get("/api/shorturl/:num?", function(req, res) {
   const num = req.params.num;
   console.log('== /api/shorturl/:num? ==', num);
-  // res.redirect(websites[num]);
   res.json({
-    text: "success",
+    text: "succezz",
+    // data: dbData,
   });
+  // res.redirect(websites[num]);
 });
 
 app.listen(port, function () {
