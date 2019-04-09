@@ -49,8 +49,8 @@ app.get('/', function(req, res){
 
 app.post("/api/shorturl/new", async (request, response) => {
   try {
-    var website = new Website(request.body);
-    var result = await website.save();
+    const website = new Website(request.body);
+    const result = await website.save();
     response.send({
       address: result.url
     });
