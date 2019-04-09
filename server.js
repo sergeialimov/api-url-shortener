@@ -51,9 +51,10 @@ app.post("/api/shorturl/new", async (request, response) => {
   try {
     const website = new Website(request.body);
     const result = await website.save();
+    const allWebsites = await Website.find();
     response.send({
       original_url: result.url,
-      short_url: 2,
+      short_url: allWebsites.length - 1,
     });
   } catch (error) {
     response.status(500).send(error);
