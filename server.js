@@ -47,17 +47,17 @@ app.get('/', function(req, res){
   res.sendFile(process.cwd() + '/views/index.html');
 });
 
-app.post("/api/shorturl/new", async (request, response) => {
+app.post("/api/shorturl/new", async (req, res) => {
   try {
-    const website = new Website(request.body);
+    const website = new Website(req.body);
     const result = await website.save();
     const allWebsites = await Website.find();
-    response.send({
+    res.send({
       original_url: result.url,
       short_url: allWebsites.length - 1,
     });
   } catch (error) {
-    response.status(500).send(error);
+    res.status(500).send(error);
   }
 });
 
