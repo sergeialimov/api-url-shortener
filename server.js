@@ -51,7 +51,9 @@ app.post("/api/shorturl/new", async (request, response) => {
   try {
     var website = new Website(request.body);
     var result = await website.save();
-    response.send(result);
+    response.send({
+      address: result.url
+    });
   } catch (error) {
     response.status(500).send(error);
   }
