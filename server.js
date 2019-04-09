@@ -35,7 +35,7 @@ mongoose.connect(uri, {
 // create instance of schema
 const websiteSchema = new mongoose.Schema({
   // _id: Number,
-  address: String,
+  url: String,
 });
 
 // create model from schema
@@ -49,9 +49,7 @@ app.get('/', function(req, res){
 
 app.post("/api/shorturl/new", async (request, response) => {
   try {
-    var website = new Website({
-      address: request.body
-    });
+    var website = new Website(request.body);
     var result = await website.save();
     response.send(result);
   } catch (error) {
