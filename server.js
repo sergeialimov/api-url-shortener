@@ -68,20 +68,12 @@ app.post("/api/shorturl/new", async (req, res, next) => {
   }
 });
 
-app.get("/read", function(req, res) {
+app.get("/api/shorturl/:num", function(req, res) {
+  const num = req.params.num;
   Website.find(function (err, product) {
     if (err) {
       return next(err);
     }
-    res.send(product)
-  });
-});
-
-app.get("/api/shorturl/:num?", function(req, res) {
-  const num = req.params.num;
-  console.log('== /api/shorturl/:num? ==', num);
-  res.json({
-    text: "succezz",
-    // data: dbData,
+    res.redirect(product[num].url);
   });
 });
