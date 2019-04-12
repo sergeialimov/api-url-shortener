@@ -19,7 +19,6 @@ app.listen(port, function () {
   console.log('Node.js listening at :3000...');
 });
 
-// mongoose.disconnect();
 mongoose.connect(uri, {
   keepAlive: true,
   reconnectTries: Number.MAX_VALUE,
@@ -47,7 +46,15 @@ app.get('/', function(req, res){
   res.sendFile(process.cwd() + '/views/index.html');
 });
 
-app.post("/api/shorturl/new", async (req, res) => {
+app.post("/api/shorturl/new", async (req, res, next) => {
+  dns.lookup(req.body.url.split("/").pop(), (error, address, family) => {
+    if (error) {
+      console.log(error);
+    }
+    if (!address) {
+      res.json({ "error": "invalid URL" });
+    }
+  });
   try {
     const website = new Website(req.body);
     const result = await website.save();
