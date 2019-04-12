@@ -68,12 +68,12 @@ app.post("/api/shorturl/new", async (req, res, next) => {
   }
 });
 
-app.get("/api/shorturl/read", function(req, res) {
+app.get("/read", function(req, res) {
   Website.find(function (err, product) {
     if (err) {
       return next(err);
-      res.send(product);
     }
+    res.send(product)
   });
 });
 
