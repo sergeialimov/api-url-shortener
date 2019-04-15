@@ -1,11 +1,6 @@
 const Website = require('../models/website.model');
 const dns = require('dns');
 
-//Simple version, without validation or sanitation
-exports.test = function (req, res) {
-    res.send('Greetings from the Test controller!');
-};
-
 exports.website_new = async (req, res, next) => {
   dns.lookup(req.body.url.split("/").pop(), (error, address, family) => {
     if (error) {
