@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const product_controller = require('../controllers/website.controller');
+const website_controller = require('../controllers/website.controller');
 
 
 // a simple test url to check that all of our files are communicating correctly.
