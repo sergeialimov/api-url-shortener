@@ -8,12 +8,14 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 const uri = "mongodb+srv://8912652:good0101_@cluster0-bie1i.mongodb.net/urls?retryWrites=true";
+const website = require('./routes/website.route');
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true,
 }));
+app.use('/', website)
 
 app.listen(port, function () {
   console.log('Node.js listening at :3000...');
@@ -41,10 +43,6 @@ const websiteSchema = new mongoose.Schema({
 const Website = mongoose.model('websites', websiteSchema);
 
 app.use('/public', express.static(process.cwd() + '/public'));
-
-app.get('/', function(req, res){
-  res.sendFile(process.cwd() + '/views/index.html');
-});
 
 app.post("/api/shorturl/new", async (req, res, next) => {
   dns.lookup(req.body.url.split("/").pop(), (error, address, family) => {
