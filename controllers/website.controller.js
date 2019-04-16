@@ -12,13 +12,18 @@ exports.website_new = async (req, res) => {
     }
   });
   try {
-    const website = new Website(req.body);
-    const result = await website.save();
-    const allWebsites = await Website.find();
-    res.send({
-      original_url: result.url,
-      short_url: allWebsites.length - 1,
-    });
+    const websites = await Website.find({ url: req.body.url });
+    const website = websites[0];
+    if (!website) {
+      const newWebsite = new Website(req.body);
+      const result = await newWebsite.save();
+      res.send({
+        original_url: result.url,
+        short_url: result._id,
+      });
+    } else {
+      res.send(`Specified url already existing\nThe shorturl is: ${website._id}`);
+    }
   } catch (error) {
     res.status(500)
       .send(error);
