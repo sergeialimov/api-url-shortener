@@ -2,10 +2,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
+require('dotenv')
+  .config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-const uri = 'mongodb+srv://8912652:good0101_@cluster0-bie1i.mongodb.net/urls?retryWrites=true';
+const uri = process.env.MONGO_URI;
 const website = require('./routes/website.route');
 
 app.use(cors());
@@ -16,9 +18,8 @@ app.use(bodyParser.urlencoded({
 app.use('/', website);
 
 app.listen(port, () => {
-  console.log('Node.js listening at :3000...');
+  console.log(`Node.js listening at :${port}...`);
 });
-
 mongoose.connect(uri, {
   keepAlive: true,
   reconnectTries: Number.MAX_VALUE,
