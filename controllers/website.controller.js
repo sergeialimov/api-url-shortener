@@ -1,13 +1,14 @@
-const Website = require('../models/website.model');
 const dns = require('dns');
+const Website = require('../models/website.model');
 
-exports.website_new = async (req, res, next) => {
-  dns.lookup(req.body.url.split("/").pop(), (error, address, family) => {
+exports.website_new = async (req, res) => {
+  dns.lookup(req.body.url.split('/')
+    .pop(), (error, address) => {
     if (error) {
       console.log(error);
     }
     if (!address) {
-      res.json({ "error": "invalid URL" });
+      res.json({ error: 'Invalid URL' });
     }
   });
   try {
@@ -19,17 +20,19 @@ exports.website_new = async (req, res, next) => {
       short_url: allWebsites.length - 1,
     });
   } catch (error) {
-    res.status(500).send(error);
-  };
+    res.status(500)
+      .send(error);
+  }
 };
 
-exports.website_default = function(req, res){
-  res.sendFile(process.cwd() + '/views/index.html');
+exports.website_default = (req, res) => {
+  res.sendFile(`${process.cwd()}/views/index.html`);
 };
 
-exports.website_open_short = function(req, res) {
-  const num = req.params.num;
-  Website.find(function (err, product) {
+exports.website_open_short = (req, res, next) => {
+  const { num } = req.params;
+  /* eslint-disable prefer-arrow-callback */
+  Website.find(function findWebsite (err, product) {
     if (err) {
       return next(err);
     }
