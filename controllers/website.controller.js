@@ -34,9 +34,9 @@ exports.website_open_short = (req, res, next) => {
   // according to mongoose docs – arrow function should not be used
   /* eslint-disable prefer-arrow-callback */
   Website.find(function findWebsite (err, product) {
-    if (err) {
-      return next(err);
+    if (!err) {
+      res.redirect(product[num].url);
     }
-    res.redirect(product[num].url);
+    return next(err);
   });
 };
