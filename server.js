@@ -6,7 +6,7 @@ require('dotenv')
   .config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 const uri = process.env.MONGO_URI;
 const website = require('./routes/website.route');
 
@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({
 app.use('/', website);
 
 app.listen(port, () => {
-  console.log(`Node.js listening at :${port}...`);
+  console.log(`Node.js listening at: ${port}...`);
 });
 mongoose.connect(uri, {
   keepAlive: true,
