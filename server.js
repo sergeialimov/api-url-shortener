@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true,
 }));
-app.use('/', website)
+app.use('/', website);
 
 app.listen(port, () => {
   console.log('Node.js listening at :3000...');
@@ -24,10 +24,10 @@ mongoose.connect(uri, {
   reconnectTries: Number.MAX_VALUE,
   useNewUrlParser: true,
 })
-.then(() => {
-    console.log('Database connection successful')
+  .then(() => {
+    console.log('Database connection successful');
   })
   .catch((err) => {
-    console.error('Database connection error', err)
-});
+    console.error('Database connection error', err);
+  });
 app.use('/public', express.static(`${process.cwd()}/public`));
