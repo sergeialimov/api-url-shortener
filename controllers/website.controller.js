@@ -31,6 +31,7 @@ exports.website_default = (req, res) => {
 
 exports.website_open_short = (req, res, next) => {
   const { num } = req.params;
+  // according to mongoose docs – arrow function should not be used
   /* eslint-disable prefer-arrow-callback */
   Website.find(function findWebsite (err, product) {
     if (err) {
