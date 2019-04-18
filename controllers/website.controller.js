@@ -15,8 +15,8 @@ async function checkUrl (url) {
 async function getNextSequence (name) {
   const result = await Counter.findOneAndUpdate(
     { _id: name }, { $inc: { seq: 1 } }, { new: true }, ((err, data) => data)
-      .catch((err) => console.log(err))
-  );
+  )
+    .catch((err) => console.log(err));
   return result.seq;
 }
 
