@@ -24,6 +24,7 @@ mongoose.connect(uri, {
   keepAlive: true,
   reconnectTries: Number.MAX_VALUE,
   useNewUrlParser: true,
+  useFindAndModify: false,
 })
   .then(() => {
     console.log('Database connection successful');
