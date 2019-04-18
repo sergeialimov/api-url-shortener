@@ -64,7 +64,7 @@ exports.website_open_short = async (req, res) => {
     res.status(200)
       .redirect(website.url);
   } else {
-    res.status(204)
+    res.status(200)
       .send(`There is no website with shorturl: ${parsedNum}`);
   }
 };
