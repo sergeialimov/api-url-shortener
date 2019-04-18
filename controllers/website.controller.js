@@ -2,7 +2,7 @@ const dns = require('dns');
 const util = require('util');
 
 const Website = require('../models/website.model');
-const Counter = require('../models/counter.model');
+const counterController = require('../controllers/counter.controller');
 
 const dnsLookupAsync = util.promisify(dns.lookup);
 
@@ -12,20 +12,12 @@ async function checkUrl (url) {
     .catch((err) => console.log(err));
 }
 
-async function getNextSequence (name) {
-  const result = await Counter.findOneAndUpdate(
-    { _id: name }, { $inc: { seq: 1 } }, { new: false }
-  )
-    .catch((err) => console.log(err));
-  return result.seq;
-}
-
 exports.website_new = async (req, res) => {
   const address = await checkUrl(req.body.url.split('/')
     .pop());
   if (address) {
     try {
-      const counter = await getNextSequence('userid');
+      const counter = await counterController.getNextSequence('userid');
       const website = (await Website.find({ url: req.body.url }))[0];
       if (!website) {
         const newWebsite = new Website({ _id: counter, url: req.body.url });
