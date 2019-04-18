@@ -65,10 +65,11 @@ exports.website_default = (req, res) => {
 };
 
 exports.website_open_short = async (req, res, next) => {
-  const { num } = req.params;
-  const parsedNum = parseInt(num, 10);
-
+  const parsedNum = parseInt(req.params.num, 10);
   const website = await Website.findById(parsedNum, (err, data) => data)
     .catch((err) => next(err));
-  res.redirect(website.url);
+  if (website) {
+    res.redirect(website.url);
+  }
+  res.send(`There is no website with shorturl: ${parsedNum}`);
 };
