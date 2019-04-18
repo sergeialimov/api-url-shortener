@@ -12,21 +12,13 @@ async function checkUrl (url) {
     .catch((err) => console.log(err));
 }
 
-const getNextSequence = async (name) => {
-  const res = Counter.findOneAndUpdate(
-    { _id: name },
-    { $inc: { seq: 1 } },
-    { new: true },
-    (err, response) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(response);
-      }
-    }
+async function getNextSequence (name) {
+  const result = await Counter.findOneAndUpdate(
+    { _id: name }, { $inc: { seq: 1 } }, { new: true }, ((err, data) => data)
+      .catch((err) => console.log(err))
   );
-  return res;
-};
+  return result.seq;
+}
 
 exports.website_new = async (req, res) => {
   const url = await checkUrl(req.body.url.split('/')
@@ -37,18 +29,17 @@ exports.website_new = async (req, res) => {
   } else {
     try {
       const counter = await getNextSequence('userid');
-      console.log('counter', counter.seq);
       const websites = await Website.find({ url: req.body.url });
       const website = websites[0];
       if (!website) {
         const newWebsite = new Website({
-          _id: counter.seq,
+          _id: counter,
           url: req.body.url,
         });
         const result = await newWebsite.save();
         res.send({
           original_url: result.url,
-          short_url: counter.seq,
+          short_url: counter,
         });
       } else {
         res.send(`Specified url already existing\nThe shorturl is: ${website._id}`);
