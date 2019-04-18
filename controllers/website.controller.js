@@ -64,13 +64,11 @@ exports.website_default = (req, res) => {
   res.sendFile(`${process.cwd()}/views/index.html`);
 };
 
-exports.website_open_short = (req, res, next) => {
+exports.website_open_short = async (req, res, next) => {
   const { num } = req.params;
   const parsedNum = parseInt(num, 10);
-  Website.findById(parsedNum, (err, product) => {
-    if (!err) {
-      res.redirect(product.url);
-    }
-    return next(err);
-  });
+
+  const website = await Website.findById(parsedNum, (err, data) => data)
+    .catch((err) => next(err));
+  res.redirect(website.url);
 };
