@@ -21,34 +21,27 @@ async function getNextSequence (name) {
 }
 
 exports.website_new = async (req, res) => {
-  const url = await checkUrl(req.body.url.split('/')
+  const address = await checkUrl(req.body.url.split('/')
     .pop());
-  if (!url) {
-    res.json({ error: `The URL ${req.body.url} is invalid` });
-  // else should be replaced with return next()
-  } else {
+  if (address) {
     try {
       const counter = await getNextSequence('userid');
-      const websites = await Website.find({ url: req.body.url });
-      const website = websites[0];
+      const website = (await Website.find({ url: req.body.url }))[0];
       if (!website) {
-        const newWebsite = new Website({
-          _id: counter,
-          url: req.body.url,
-        });
+        const newWebsite = new Website({ _id: counter, url: req.body.url });
         const result = await newWebsite.save();
         res.send({
           original_url: result.url,
           short_url: counter,
         });
-      } else {
-        res.send(`Specified url already existing\nThe shorturl is: ${website._id}`);
       }
+      res.send(`Specified url already existing\nThe shorturl is: ${website._id}`);
     } catch (error) {
       res.status(500)
         .send(error);
     }
   }
+  res.json({ error: `The URL ${req.body.url} is invalid` });
 };
 
 exports.website_default = (req, res) => {
