@@ -67,9 +67,7 @@ exports.website_default = (req, res) => {
 exports.website_open_short = (req, res, next) => {
   const { num } = req.params;
   const parsedNum = parseInt(num, 10);
-  // according to mongoose docs – arrow function should not be used
-  /* eslint-disable prefer-arrow-callback */
-  Website.findById(parsedNum, function findWebsite (err, product) {
+  Website.findById(parsedNum, (err, product) => {
     if (!err) {
       res.redirect(product.url);
     }
